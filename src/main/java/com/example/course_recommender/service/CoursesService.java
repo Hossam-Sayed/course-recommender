@@ -2,20 +2,20 @@ package com.example.course_recommender.service;
 
 import com.example.course_recommender.model.Course;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CoursesService {
-    private CourseRecommender courseRecommender;
+    private final CourseRecommender courseRecommender;
 
-    // Setter injection: Spring will call this method after instantiating CoursesService
-    // to inject a suitable CourseRecommender bean.
     @Autowired
-    public void setCourseRecommender(CourseRecommender courseRecommender) {
+    // Use @Qualifier to specify which bean to inject based on its name
+    public CoursesService(@Qualifier("advancedRecommender") CourseRecommender courseRecommender) {
         this.courseRecommender = courseRecommender;
-        System.out.println("CoursesService (setter) initialized with: " + courseRecommender.getClass().getSimpleName());
+        System.out.println("CoursesService initialized with @Qualifier: " + courseRecommender.getClass().getSimpleName());
     }
 
     public List<Course> getRecommendedCourses() {
