@@ -1,12 +1,14 @@
 package com.example.course_recommender.service;
 
 import com.example.course_recommender.model.Course;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Component("beginnerRecommender") // Assign a specific name to the bean
+@Primary
 public class BeginnerCourseRecommender implements CourseRecommender {
 
     @Override
