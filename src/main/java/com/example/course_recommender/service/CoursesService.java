@@ -8,14 +8,14 @@ import java.util.List;
 
 @Service
 public class CoursesService {
-    private final CourseRecommender courseRecommender;
+    private CourseRecommender courseRecommender;
 
-    // Constructor injection: Spring will automatically find a suitable CourseRecommender bean
-    // and inject it when creating an instance of CoursesService.
+    // Setter injection: Spring will call this method after instantiating CoursesService
+    // to inject a suitable CourseRecommender bean.
     @Autowired
-    public CoursesService(CourseRecommender courseRecommender) {
+    public void setCourseRecommender(CourseRecommender courseRecommender) {
         this.courseRecommender = courseRecommender;
-        System.out.println("CoursesService initialized with: " + courseRecommender.getClass().getSimpleName());
+        System.out.println("CoursesService (setter) initialized with: " + courseRecommender.getClass().getSimpleName());
     }
 
     public List<Course> getRecommendedCourses() {
