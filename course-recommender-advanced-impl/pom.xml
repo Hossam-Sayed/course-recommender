@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.example</groupId>
+		<artifactId>course-recommender-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>course-recommender-advanced-impl</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Course Recommender Advanced Implementation</name>
+	<description>Implementation for Advanced Course Recommender</description>
+
+	<dependencies>
+		<!-- Dependency on the API project -->
+		<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>course-recommender-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Spring Context for @Configuration and @Bean -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

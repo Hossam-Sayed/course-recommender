@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.example</groupId>
+		<artifactId>course-recommender-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>course-recommender-api</artifactId>
+	<packaging>jar</packaging>
+
+	<name>Course Recommender API</name>
+	<description>Shared API interfaces and models for Course Recommender</description>
+
+	<dependencies>
+		<!-- No Spring dependencies needed here, as it's just interfaces/models -->
+	</dependencies>
+
+</project>
