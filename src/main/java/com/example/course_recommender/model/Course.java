@@ -1,48 +1,20 @@
 package com.example.course_recommender.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.UUID;
+
+/**
+ * Represents a Course in the system.
+ */
+@Data // Generates getters, setters, toString, equals, hashCode
+@NoArgsConstructor // Generates a no-argument constructor
+@AllArgsConstructor // Generates a constructor with all fields as arguments
 public class Course {
-    private String id;
-    private String title;
-    private String level;
-
-    public Course(String id, String title, String level) {
-        this.id = id;
-        this.title = title;
-        this.level = level;
-    }
-
-    // Getters
-    public String getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    // Setters
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", level='" + level + '\'' +
-                '}';
-    }
+    private UUID id;
+    private String name;
+    private String description;
+    private int credit;
 }
