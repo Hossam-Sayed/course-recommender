@@ -12,8 +12,8 @@ public class AdvancedCourseRecommender implements CourseRecommender {
     @Override
     public List<Course> recommendedCourses() {
         return Arrays.asList(
-                new Course("A001", "Machine Learning with Python", "Advanced"),
-                new Course("A002", "Cloud Native Architectures", "Advanced")
+//                new Course("A001", "Machine Learning with Python", "Advanced"),
+//                new Course("A002", "Cloud Native Architectures", "Advanced")
         );
     }
 }

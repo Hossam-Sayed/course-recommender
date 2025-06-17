@@ -61,7 +61,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     public Course save(Course course) {
         // SQL query to insert a new course, letting the database generate the ID
         // RETURNING id is essential for getting the auto-generated UUID back
-        String sql = "INSERT INTO courses (name, description, credit) VALUES (?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO course (name, description, credit) VALUES (?, ?, ?) RETURNING id";
 
         // Execute the insert and retrieve the generated UUID
         UUID generatedId = jdbcTemplate.queryForObject(
@@ -89,7 +89,7 @@ public class CourseRepositoryImpl implements CourseRepository {
             return Optional.empty();
         }
         // SQL query to update course details by ID
-        String sql = "UPDATE courses SET name = ?, description = ?, credit = ? WHERE id = ?";
+        String sql = "UPDATE course SET name = ?, description = ?, credit = ? WHERE id = ?";
 
         // Execute the update query. `update` returns the number of rows affected.
         int rowsAffected = jdbcTemplate.update(
@@ -119,7 +119,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public Optional<Course> findById(UUID id) {
         // SQL query to select a course by its ID
-        String sql = "SELECT id, name, description, credit FROM courses WHERE id = ?";
+        String sql = "SELECT id, name, description, credit FROM course WHERE id = ?";
         try {
             // queryForObject is used when a single row is expected.
             // If no row is found, EmptyResultDataAccessException is thrown.
@@ -135,14 +135,14 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     /**
-     * Retrieves all Courses from the database.
+     * Retrieves all Course from the database.
      *
      * @return A List of all Course objects.
      */
     @Override
     public List<Course> findAll() {
-        // SQL query to select all courses
-        String sql = "SELECT id, name, description, credit FROM courses";
+        // SQL query to select all course
+        String sql = "SELECT id, name, description, credit FROM course";
         // query is used when multiple rows are expected.
         return jdbcTemplate.query(sql, new CourseRowMapper());
     }
@@ -156,7 +156,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     @Override
     public boolean deleteById(UUID id) {
         // SQL query to delete a course by its ID
-        String sql = "DELETE FROM courses WHERE id = ?";
+        String sql = "DELETE FROM course WHERE id = ?";
         // update returns the number of rows affected.
         int rowsAffected = jdbcTemplate.update(sql, id);
         if (rowsAffected > 0) {

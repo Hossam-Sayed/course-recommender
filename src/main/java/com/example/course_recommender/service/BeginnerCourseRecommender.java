@@ -12,8 +12,8 @@ public class BeginnerCourseRecommender implements CourseRecommender {
     @Override
     public List<Course> recommendedCourses() {
         return Arrays.asList(
-                new Course("B001", "Introduction to Programming", "Beginner"),
-                new Course("B002", "Web Development Fundamentals", "Beginner")
+//                new Course("B001", "Introduction to Programming", "Beginner"),
+//                new Course("B002", "Web Development Fundamentals", "Beginner")
         );
     }
 }
