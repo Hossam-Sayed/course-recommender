@@ -50,4 +50,29 @@ public interface CourseRepository {
      * @return true if the course was deleted, false otherwise.
      */
     boolean deleteById(UUID id);
+
+    /**
+     * Links a course with an author in the `course_author` join table.
+     *
+     * @param courseId The UUID of the course.
+     * @param authorId The UUID of the author.
+     */
+    void addCourseAuthor(UUID courseId, UUID authorId);
+
+    /**
+     * Removes a link between a course and an author from the `course_author` join table.
+     *
+     * @param courseId The UUID of the course.
+     * @param authorId The UUID of the author.
+     * @return true if the link was removed, false otherwise.
+     */
+    boolean removeCourseAuthor(UUID courseId, UUID authorId);
+
+    /**
+     * Removes all author links for a given course from the `course_author` join table.
+     *
+     * @param courseId The UUID of the course.
+     * @return The number of links removed.
+     */
+    int removeAllAuthorsForCourse(UUID courseId);
 }
