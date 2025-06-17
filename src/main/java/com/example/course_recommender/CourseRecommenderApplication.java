@@ -27,7 +27,7 @@ public class CourseRecommenderApplication {
      * @param authorService The AuthorService instance.
      * @return A CommandLineRunner implementation.
      */
-    @Bean
+//    @Bean
     public CommandLineRunner commandLineRunner(CourseService courseService, AuthorService authorService) {
         return args -> {
             System.out.println("--- Starting Full CRUD Operations and M2M Relationship Test ---");
