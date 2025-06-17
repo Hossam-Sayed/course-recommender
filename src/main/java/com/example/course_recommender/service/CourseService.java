@@ -57,9 +57,7 @@ public class CourseService {
 
         // 2. Link authors to the newly created course
         for (UUID authorId : authorIds) {
-            // Optional: You could add a check here to ensure the author actually exists
-            // by calling authorRepository.findById(authorId).
-            // For now, we assume the provided authorIds are valid.
+            // TODO: add a check here to ensure the author actually exists
             courseRepository.addCourseAuthor(savedCourse.getId(), authorId);
         }
 
