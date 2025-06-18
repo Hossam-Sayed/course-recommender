@@ -1,19 +1,32 @@
 package com.example.course_recommender.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.UUID;
 
 /**
- * Represents a Rating for a Course (one-to-many relationship).
+ * Represents a Rating entity in the database.
+ * Mapped to the 'rating' table, with a many-to-one relationship to Course.
  */
+@Entity
+@Table(name = "rating")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@ToString(exclude = "course")
 public class Rating {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-    private int number; // The rating value
-    private UUID courseId; // Foreign key to Course table
+
+    @Column(name = "number", nullable = false)
+    private int number; // Rating value
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 }
