@@ -5,10 +5,11 @@ import com.example.course_recommender.mapper.AuthorMapper;
 import com.example.course_recommender.model.Author;
 import com.example.course_recommender.repository.AuthorJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -92,10 +93,9 @@ public class AuthorService {
      * @return A list of all AuthorDto objects.
      */
     @Transactional(readOnly = true)
-    public List<AuthorDto> getAllAuthors() {
-        System.out.println("Attempting to retrieve all authors.");
-        List<Author> authors = authorJpaRepository.findAll();
-        return authorMapper.toDtoList(authors);
+    public Page<AuthorDto> getAllAuthors(Pageable pageable) {
+        Page<Author> authorPage = authorJpaRepository.findAll(pageable);
+        return authorPage.map(authorMapper::toDto);
     }
 
     /**
