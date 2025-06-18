@@ -1,9 +1,9 @@
 package com.example.course_recommender.service;
 
-import com.example.course_recommender.model.Course;
-
-import java.util.List;
+import com.example.course_recommender.dto.CourseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CourseRecommender {
-    List<Course> recommendedCourses();
+    Page<CourseDto> recommendedCourses(Pageable pageable);
 }
