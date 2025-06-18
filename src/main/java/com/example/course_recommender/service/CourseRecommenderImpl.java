@@ -4,6 +4,7 @@ import com.example.course_recommender.model.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class CourseRecommenderImpl implements CourseRecommender {
     public List<Course> recommendedCourses() {
         System.out.println("Executing recommendedCourses: returning all available courses.");
         // TODO: Enhance recommendation logic
-        return courseService.getAllCourses();
+        // TODO: Update after refactoring to JPA
+        return Arrays.asList();
     }
 }
