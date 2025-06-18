@@ -12,7 +12,5 @@ import java.util.UUID;
  */
 @Repository
 public interface AuthorJpaRepository extends JpaRepository<Author, UUID> {
-    // Custom query method to find an Author by email.
-    // Spring Data JPA automatically generates the implementation based on method name.
     Optional<Author> findByEmail(String email);
 }
