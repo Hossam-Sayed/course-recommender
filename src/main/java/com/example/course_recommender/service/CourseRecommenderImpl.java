@@ -1,10 +1,14 @@
 package com.example.course_recommender.service;
 
 import com.example.course_recommender.dto.CourseDto;
+import com.example.course_recommender.mapper.CourseMapper;
+import com.example.course_recommender.model.Course;
+import com.example.course_recommender.repository.CourseJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * A placeholder implementation of the CourseRecommender interface.
@@ -12,11 +16,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseRecommenderImpl implements CourseRecommender {
 
-    private final CourseService courseService;
+    private final CourseJpaRepository courseJpaRepository;
+    private final CourseMapper courseMapper;
 
     @Autowired
-    public CourseRecommenderImpl(CourseService courseService) {
-        this.courseService = courseService;
+    public CourseRecommenderImpl(CourseJpaRepository courseJpaRepository, CourseMapper courseMapper) {
+        this.courseJpaRepository = courseJpaRepository;
+        this.courseMapper = courseMapper;
     }
 
     /**
@@ -27,9 +33,12 @@ public class CourseRecommenderImpl implements CourseRecommender {
      * @return A Page of CourseDto objects.
      */
     @Override
+    @Transactional(readOnly = true)
     public Page<CourseDto> recommendedCourses(Pageable pageable) {
         System.out.println("Executing recommendedCourses: returning all available courses with pagination.");
         // TODO: Enhance recommendation logic
-        return courseService.getAllCourses(pageable);
+        System.out.println("Attempting to retrieve all courses with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
+        Page<Course> coursePage = courseJpaRepository.findAll(pageable);
+        return coursePage.map(courseMapper::toDto); // Map the Page<Course> to Page<CourseDto>
     }
 }

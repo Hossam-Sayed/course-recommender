@@ -25,18 +25,15 @@ import java.util.UUID;
 public class CourseController {
 
     private final CourseService courseService;
-    private final CourseRecommender courseRecommender;
 
     /**
      * Constructor for CourseController. Spring automatically injects the service beans.
      *
-     * @param courseService     The CourseService instance.
-     * @param courseRecommender The CourseRecommender instance.
+     * @param courseService The CourseService instance.
      */
     @Autowired
-    public CourseController(CourseService courseService, CourseRecommender courseRecommender) {
+    public CourseController(CourseService courseService) {
         this.courseService = courseService;
-        this.courseRecommender = courseRecommender;
     }
 
     /**
@@ -133,6 +130,20 @@ public class CourseController {
     }
 
     /**
+     * Endpoint to get all courses with pagination.
+     * Maps to GET /api/courses/courses?page=0&size=10&sort=name,asc
+     * Spring automatically resolves Pageable from request parameters.
+     *
+     * @param pageable Pagination information (page number, page size, sort order).
+     * @return ResponseEntity with a Page of CourseDto objects and HTTP status 200 (OK).
+     */
+    @GetMapping("")
+    public ResponseEntity<Page<CourseDto>> getAllCourses(Pageable pageable) {
+        Page<CourseDto> recommendedCoursesPage = courseService.getAllCourses(pageable);
+        return new ResponseEntity<>(recommendedCoursesPage, HttpStatus.OK);
+    }
+
+    /**
      * Endpoint to discover all courses (using the recommendation service) with pagination.
      * Maps to GET /api/courses/recommendations?page=0&size=10&sort=name,asc
      * Spring automatically resolves Pageable from request parameters.
@@ -142,7 +153,7 @@ public class CourseController {
      */
     @GetMapping("/recommendations")
     public ResponseEntity<Page<CourseDto>> discoverAllCourses(Pageable pageable) {
-        Page<CourseDto> recommendedCoursesPage = courseRecommender.recommendedCourses(pageable); // Pass pageable
+        Page<CourseDto> recommendedCoursesPage = courseService.getRecommendedCourses(pageable);
         return new ResponseEntity<>(recommendedCoursesPage, HttpStatus.OK);
     }
 }

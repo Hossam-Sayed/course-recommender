@@ -25,6 +25,7 @@ public class CourseService {
 
     private final CourseJpaRepository courseJpaRepository;
     private final AuthorJpaRepository authorJpaRepository;
+    private final CourseRecommender courseRecommender;
     private final CourseMapper courseMapper;
 
     /**
@@ -32,12 +33,14 @@ public class CourseService {
      *
      * @param courseJpaRepository The CourseJpaRepository instance.
      * @param authorJpaRepository The AuthorJpaRepository instance.
+     * @param courseRecommender   The CourseRecommender instance
      * @param courseMapper        The CourseMapper instance.
      */
     @Autowired
-    public CourseService(CourseJpaRepository courseJpaRepository, AuthorJpaRepository authorJpaRepository, CourseMapper courseMapper) {
+    public CourseService(CourseJpaRepository courseJpaRepository, AuthorJpaRepository authorJpaRepository, CourseRecommender courseRecommender, CourseMapper courseMapper) {
         this.courseJpaRepository = courseJpaRepository;
         this.authorJpaRepository = authorJpaRepository;
+        this.courseRecommender = courseRecommender;
         this.courseMapper = courseMapper;
     }
 
@@ -154,6 +157,17 @@ public class CourseService {
         System.out.println("Attempting to retrieve all courses with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
         Page<Course> coursePage = courseJpaRepository.findAll(pageable);
         return coursePage.map(courseMapper::toDto); // Map the Page<Course> to Page<CourseDto>
+    }
+
+    /**
+     * Retrieves recommended courses
+     *
+     * @param pageable Pagination information (page number, page size, sort order).
+     * @return A Page of recommended CourseDto objects.
+     */
+    public Page<CourseDto> getRecommendedCourses(Pageable pageable) {
+        System.out.println("Attempting to retrieve all courses with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
+        return courseRecommender.recommendedCourses(pageable);
     }
 
     /**
