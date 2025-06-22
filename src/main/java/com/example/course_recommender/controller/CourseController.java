@@ -2,7 +2,6 @@ package com.example.course_recommender.controller;
 
 import com.example.course_recommender.dto.CourseDto;
 import com.example.course_recommender.service.CourseService;
-import com.example.course_recommender.service.CourseRecommender;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
