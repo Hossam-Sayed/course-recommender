@@ -1,4 +1,4 @@
-package com.example.course_recommender.dto;
+package com.example.course_recommender_bean.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

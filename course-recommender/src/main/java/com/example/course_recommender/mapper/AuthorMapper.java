@@ -1,7 +1,7 @@
 package com.example.course_recommender.mapper;
 
 import com.example.course_recommender.model.Author;
-import com.example.course_recommender.dto.AuthorDto;
+import com.example.course_recommender_bean.dto.AuthorDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

@@ -1,6 +1,6 @@
 package com.example.course_recommender.controller;
 
-import com.example.course_recommender.dto.AuthorDto;
+import com.example.course_recommender_bean.dto.AuthorDto;
 import com.example.course_recommender.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
 package com.example.course_recommender.controller;
 
-import com.example.course_recommender.dto.CourseDto;
+import com.example.course_recommender_bean.dto.CourseDto;
 import com.example.course_recommender.service.CourseService;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,7 +70,7 @@ public class CourseController {
      *
      * @param inputDto The CourseInputDto object containing course details and author IDs.
      * @return ResponseEntity with the created CourseDto object and HTTP status 201 (Created),
-     * or HTTP status 400 (Bad Request) if input is invalid (e.g., missing author IDs).
+     * or HTTP status 400 (Bad Request) if input is invalid.
      */
     @PostMapping
     public ResponseEntity<CourseDto> addCourse(@RequestBody CourseInputDto inputDto) {

@@ -1,6 +1,6 @@
 package com.example.course_recommender.service;
 
-import com.example.course_recommender.dto.AuthorDto;
+import com.example.course_recommender_bean.dto.AuthorDto;
 import com.example.course_recommender.mapper.AuthorMapper;
 import com.example.course_recommender.model.Author;
 import com.example.course_recommender.repository.AuthorJpaRepository;

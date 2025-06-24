@@ -1,9 +1,10 @@
 package com.example.course_recommender.service;
 
-import com.example.course_recommender.dto.CourseDto;
 import com.example.course_recommender.mapper.CourseMapper;
 import com.example.course_recommender.model.Course;
 import com.example.course_recommender.repository.CourseJpaRepository;
+import com.example.course_recommender_bean.dto.CourseDto;
+import com.example.course_recommender_bean.service.CourseRecommenderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
  * A placeholder implementation of the CourseRecommender interface.
  */
 @Service
-public class CourseRecommenderImpl implements CourseRecommender {
+public class CustomCourseRecommenderImpl extends CourseRecommenderImpl {
 
     private final CourseJpaRepository courseJpaRepository;
     private final CourseMapper courseMapper;
 
     @Autowired
-    public CourseRecommenderImpl(CourseJpaRepository courseJpaRepository, CourseMapper courseMapper) {
+    public CustomCourseRecommenderImpl(CourseJpaRepository courseJpaRepository, CourseMapper courseMapper) {
         this.courseJpaRepository = courseJpaRepository;
         this.courseMapper = courseMapper;
     }
@@ -39,6 +40,6 @@ public class CourseRecommenderImpl implements CourseRecommender {
         // TODO: Enhance recommendation logic
         System.out.println("Attempting to retrieve all courses with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
         Page<Course> coursePage = courseJpaRepository.findAll(pageable);
-        return coursePage.map(courseMapper::toDto); // Map the Page<Course> to Page<CourseDto>
+        return coursePage.map(courseMapper::toDto);
     }
 }

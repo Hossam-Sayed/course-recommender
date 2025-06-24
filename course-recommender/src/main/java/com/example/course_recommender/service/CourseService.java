@@ -1,11 +1,12 @@
 package com.example.course_recommender.service;
 
-import com.example.course_recommender.dto.CourseDto;
+import com.example.course_recommender_bean.dto.CourseDto;
 import com.example.course_recommender.mapper.CourseMapper;
 import com.example.course_recommender.model.Author;
 import com.example.course_recommender.model.Course;
 import com.example.course_recommender.repository.AuthorJpaRepository;
 import com.example.course_recommender.repository.CourseJpaRepository;
+import com.example.course_recommender_bean.service.CourseRecommender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

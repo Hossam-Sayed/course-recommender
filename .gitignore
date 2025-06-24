@@ -1,33 +1,33 @@
-HELP.md
+# Maven
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Spring Boot help file (auto-generated)
+**/HELP.md
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Build tools
+build/
+**/build/
+
+# IDEs
 *.iml
 *.ipr
+*.iws
+.idea/
+.vscode/
+*.class
 
-### NetBeans ###
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated
+
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/

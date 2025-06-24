@@ -67,7 +67,7 @@ public class RatingController {
      *
      * @param ratingDto The RatingDto object to be added.
      * @return ResponseEntity with the created RatingDto object and HTTP status 201 (Created),
-     * or HTTP status 400 (Bad Request) if input is invalid (e.g., missing courseId or invalid course).
+     * or HTTP status 400 (Bad Request) if input is invalid.
      */
     @PostMapping
     public ResponseEntity<RatingDto> addRating(@RequestBody RatingDto ratingDto) {
@@ -86,7 +86,7 @@ public class RatingController {
     /**
      * Endpoint to update an existing rating.
      * Maps to PUT /api/ratings/{id}
-     * Expects a JSON request body with updated rating details (e.g., number).
+     * Expects a JSON request body with updated rating details.
      *
      * @param id        The UUID of the rating to update, passed as a path variable.
      * @param ratingDto The RatingDto object with updated details.
