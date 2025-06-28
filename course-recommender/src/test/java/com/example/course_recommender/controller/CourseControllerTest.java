@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -158,6 +160,25 @@ class CourseControllerTest {
     }
 
     /**
+     * Test case for adding a course with missing author IDs.
+     * Expects HTTP 400 Bad Request.
+     */
+    @Test
+    @DisplayName("POST /api/courses - Should return 400 Bad Request when authorIds are missing")
+    void addCourse_NullAuthorIds_Returns400() throws Exception {
+        // Given
+        courseInputDto.setAuthorIds(null); // Set null author IDs
+
+        // When & Then
+        mockMvc.perform(post("/api/courses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(courseInputDto)))
+                .andExpect(status().isBadRequest()); // Asserts HTTP 400 Bad Request
+
+        verifyNoInteractions(courseService); // No interaction with the service when input is invalid
+    }
+
+    /**
      * Test case for adding a course when service throws IllegalArgumentException.
      * Expects HTTP 400 Bad Request.
      */
@@ -173,6 +194,26 @@ class CourseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(courseInputDto)))
                 .andExpect(status().isBadRequest());
+
+        verify(courseService, times(1)).addCourse(any(CourseDto.class), anyList());
+    }
+
+    /**
+     * Test case for adding a course when service throws Exception.
+     * Expects HTTP 500 Internal Server Error.
+     */
+    @Test
+    @DisplayName("POST /api/courses - Should return 500 Internal Server Error when service throws any Exception")
+    void addCourse_UnknownException_Returns500() throws Exception {
+        // Given
+        when(courseService.addCourse(any(CourseDto.class), anyList()))
+                .thenThrow(new RuntimeException("An unexpected error occurred"));
+
+        // When & Then
+        mockMvc.perform(post("/api/courses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(courseInputDto)))
+                .andExpect(status().isInternalServerError());
 
         verify(courseService, times(1)).addCourse(any(CourseDto.class), anyList());
     }

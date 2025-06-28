@@ -162,6 +162,27 @@ class CourseServiceTest {
     }
 
     /**
+     * Test case for adding a course with null author IDs, expecting an IllegalArgumentException.
+     */
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when adding course with null author IDs")
+    void addCourse_NullAuthorIds_ThrowsException() {
+        // Given
+        List<UUID> authorIds = null; // Null author IDs
+
+        // When/Then
+        // Assert that calling addCourse with empty authorIds throws IllegalArgumentException
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+                courseService.addCourse(courseDto, authorIds)
+        );
+
+        // Verify exception message
+        assertEquals("A course must be linked to at least one author.", thrown.getMessage());
+        // No interactions with mocks
+        verifyNoInteractions(courseMapper, courseJpaRepository, authorJpaRepository);
+    }
+
+    /**
      * Test case for adding a course with invalid author IDs, expecting an IllegalArgumentException.
      */
     @Test
@@ -277,6 +298,85 @@ class CourseServiceTest {
                         c.getAuthors().size() == 1
         ));
         verify(courseMapper, times(1)).toDto(finalUpdatedCourse);
+    }
+
+    /**
+     * Test case for updating an existing course without changing authors.
+     */
+    @Test
+    @DisplayName("Should successfully update an existing course without changing authors")
+    void updateCourse_Success_EmptyNewAuthors() {
+        // Given
+        CourseDto updatedCourseDto = new CourseDto(courseId, "Updated Course", "Updated Description", 4, Collections.emptyList());
+
+        // Existing course with author1 linked
+        Course existingCourse = new Course(courseId, "Old Course", "Old Description", 2);
+        existingCourse.setAuthors(new ArrayList<>(Collections.singletonList(author1)));
+
+        // The final state of the course after update (authors remain the same)
+        Course finalUpdatedCourse = new Course(courseId, "Updated Course", "Updated Description", 4);
+        finalUpdatedCourse.setAuthors(new ArrayList<>(Collections.singletonList(author1)));
+
+        // When
+        when(courseJpaRepository.findById(courseId)).thenReturn(Optional.of(existingCourse));
+        doNothing().when(courseMapper).updateEntityFromDto(any(CourseDto.class), any(Course.class));
+        when(courseJpaRepository.save(any(Course.class))).thenReturn(finalUpdatedCourse);
+        when(courseMapper.toDto(any(Course.class))).thenReturn(updatedCourseDto);
+
+        Optional<CourseDto> result = courseService.updateCourse(courseId, updatedCourseDto, Collections.emptyList()); // Empty new authors provided
+
+        // Then
+        assertTrue(result.isPresent());
+        assertEquals(updatedCourseDto.getName(), result.get().getName());
+        verify(courseJpaRepository, times(1)).findById(courseId);
+        verify(courseMapper, times(1)).updateEntityFromDto(updatedCourseDto, existingCourse);
+        verify(authorJpaRepository, never()).findById(any(UUID.class)); // Verify no interaction with author repo
+        // Verify that the course entity passed to save method still contains author1
+        verify(courseJpaRepository, times(1)).save(argThat(c ->
+                c.getAuthors() != null &&
+                        c.getAuthors().contains(author1) &&
+                        c.getAuthors().size() == 1
+        ));
+        verify(courseMapper, times(1)).toDto(finalUpdatedCourse);
+    }
+
+    /**
+     * New test case to cover the branch where new author IDs are provided but none are valid.
+     */
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when updating course with invalid new author IDs")
+    void updateCourse_InvalidNewAuthorIds_ThrowsException() {
+        // Given
+        UUID invalidAuthorId = UUID.randomUUID();
+        List<UUID> newAuthorIds = Collections.singletonList(invalidAuthorId); // List with one invalid author ID
+
+        CourseDto updatedCourseDto = new CourseDto(courseId, "Updated Course", "Updated Description", 4, Collections.emptyList());
+
+        // Existing course to be found
+        Course existingCourse = new Course(courseId, "Existing Course", "Existing Description", 3);
+        existingCourse.setAuthors(new ArrayList<>(Collections.singletonList(author1))); // It might have existing authors
+
+        // When
+        // Mock existing course lookup
+        when(courseJpaRepository.findById(courseId)).thenReturn(Optional.of(existingCourse));
+        // Mock authorJpaRepository to return Optional.empty() for the invalid ID
+        when(authorJpaRepository.findById(invalidAuthorId)).thenReturn(Optional.empty());
+        // Mock updateEntityFromDto as it would be called before the author validation
+        doNothing().when(courseMapper).updateEntityFromDto(any(CourseDto.class), any(Course.class));
+
+        // Then
+        // Assert that calling updateCourse throws IllegalArgumentException
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->
+                courseService.updateCourse(courseId, updatedCourseDto, newAuthorIds)
+        );
+
+        assertEquals("None of the provided new author IDs were valid.", thrown.getMessage()); // Verify exception message
+
+        verify(courseJpaRepository, times(1)).findById(courseId); // Verify existing course was looked up
+        verify(courseMapper, times(1)).updateEntityFromDto(updatedCourseDto, existingCourse); // Verify mapper was called
+        verify(authorJpaRepository, times(1)).findById(invalidAuthorId); // Verify invalid author ID was looked up
+        verify(courseJpaRepository, never()).save(any(Course.class)); // Verify save was NOT called
+        verify(courseMapper, never()).toDto(any(Course.class)); // Verify toDto was NOT called
     }
 
     /**

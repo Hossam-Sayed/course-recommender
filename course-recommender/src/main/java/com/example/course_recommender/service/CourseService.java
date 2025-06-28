@@ -107,19 +107,20 @@ public class CourseService {
 
             // Update author associations if newAuthorIds are provided
             if (newAuthorIds != null && !newAuthorIds.isEmpty()) {
-                // Clear existing authors from the collection
-                existingCourse.getAuthors().clear(); // JPA will handle removal from join table
 
                 // Fetch new Author entities and add them to the collection
                 List<Author> authorsToAdd = newAuthorIds.stream()
                         .map(authorJpaRepository::findById)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(Collectors.toList());
+                        .toList();
 
                 if (authorsToAdd.isEmpty()) {
                     throw new IllegalArgumentException("None of the provided new author IDs were valid.");
                 }
+
+                // Clear existing authors from the collection
+                existingCourse.getAuthors().clear(); // JPA will handle removal from join table
 
                 existingCourse.getAuthors().addAll(authorsToAdd); // JPA will handle adding to join table
             }
