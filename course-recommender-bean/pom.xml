@@ -15,6 +15,13 @@
     <name>Course Recommender Bean</name>
     <description>Shared DTOs and decoupled Course Recommender logic</description>
 
+    <properties>
+        <!-- Override sonar.tests for this module as it has no test sources -->
+        <sonar.tests/>
+        <!-- Explicitly define sonar.sources for this module -->
+        <sonar.sources>src/main/java</sonar.sources>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
