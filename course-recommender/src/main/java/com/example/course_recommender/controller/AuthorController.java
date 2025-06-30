@@ -52,9 +52,19 @@ public class AuthorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AuthorDto> updateAuthor(@PathVariable UUID id, @RequestBody AuthorDto authorDto) {
-        Optional<AuthorDto> updated = authorService.updateAuthor(id, authorDto);
-        return updated.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Optional<AuthorDto> updated = authorService.updateAuthor(id, authorDto);
+            return updated.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (IllegalArgumentException e) {
+            // Catch IllegalArgumentException and return 400 Bad Request
+            System.err.println("Error updating author: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions and return 500 Internal Server Error
+            System.err.println("An unexpected error occurred while updating author: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{id}")
