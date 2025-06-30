@@ -134,6 +134,10 @@
                                 <exclude>**/model/**</exclude> <!-- Exclude JPA Entities -->
                                 <exclude>**/dto/**</exclude> <!-- Exclude DTOs -->
                                 <exclude>**/CourseRecommenderApplication.class</exclude> <!-- Exclude main app class -->
+                                <exclude>**/AssessmentService.class</exclude> <!-- Exclude Assessment service class -->
+                                <exclude>**/AssessmentController.class</exclude> <!-- Exclude Assessment controller class -->
+                                <exclude>**/RatingService.class</exclude> <!-- Exclude Rating service class -->
+                                <exclude>**/RatingController.class</exclude> <!-- Exclude Rating controller class -->
                                 <exclude>**/mapper/**</exclude> <!-- Exclude Mappers -->
                                 <exclude>**/config/**</exclude> <!-- Exclude Configs -->
                                 <exclude>**/repository/**</exclude> <!-- Exclude Repositories -->
@@ -147,6 +151,10 @@
                         <exclude>**/model/**</exclude>
                         <exclude>**/dto/**</exclude>
                         <exclude>**/CourseRecommenderApplication.class</exclude>
+                        <exclude>**/AssessmentService.class</exclude>
+                        <exclude>**/AssessmentController.class</exclude>
+                        <exclude>**/RatingService.class</exclude>
+                        <exclude>**/RatingController.class</exclude>
                         <exclude>**/mapper/**</exclude>
                         <exclude>**/config/**</exclude>
                         <exclude>**/repository/**</exclude>
