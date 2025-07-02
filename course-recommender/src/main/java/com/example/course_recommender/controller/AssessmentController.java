@@ -2,6 +2,7 @@ package com.example.course_recommender.controller;
 
 import com.example.course_recommender.dto.AssessmentDto;
 import com.example.course_recommender.service.AssessmentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.UUID;
  * REST Controller for managing Assessment resources.
  * Exposes endpoints for CRUD operations and retrieving assessments by course.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/assessments")
 public class AssessmentController {
@@ -75,10 +77,10 @@ public class AssessmentController {
             AssessmentDto savedAssessment = assessmentService.addAssessment(assessmentDto);
             return new ResponseEntity<>(savedAssessment, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            System.err.println("Error adding assessment: " + e.getMessage());
+            log.error("Error adding assessment: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred while adding assessment: " + e.getMessage());
+            log.error("An unexpected error occurred while adding assessment: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -100,10 +102,10 @@ public class AssessmentController {
             return updatedAssessment.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (IllegalArgumentException e) {
-            System.err.println("Error updating assessment: " + e.getMessage());
+            log.error("Error updating assessment: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred while updating assessment: " + e.getMessage());
+            log.error("An unexpected error occurred while updating assessment: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

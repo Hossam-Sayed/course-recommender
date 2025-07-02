@@ -4,6 +4,7 @@ import com.example.course_recommender_bean.dto.CourseDto;
 import com.example.course_recommender.service.CourseService;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import java.util.UUID;
  * REST Controller for managing Course resources.
  * Exposes endpoints for CRUD operations and course recommendations.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
@@ -83,10 +85,10 @@ public class CourseController {
             CourseDto savedCourseDto = courseService.addCourse(courseDto, inputDto.getAuthorIds());
             return new ResponseEntity<>(savedCourseDto, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            System.err.println("Error adding course: " + e.getMessage());
+            log.error("Error adding course: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred while adding course: " + e.getMessage());
+            log.error("An unexpected error occurred while adding course: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

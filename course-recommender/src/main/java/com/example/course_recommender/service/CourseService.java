@@ -7,6 +7,7 @@ import com.example.course_recommender.model.Course;
 import com.example.course_recommender.repository.AuthorJpaRepository;
 import com.example.course_recommender.repository.CourseJpaRepository;
 import com.example.course_recommender_bean.service.CourseRecommender;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 /**
  * Service layer for managing Course-related business logic.
  */
+@Slf4j
 @Service
 public class CourseService {
 
@@ -68,7 +70,7 @@ public class CourseService {
                 .map(authorJpaRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .toList();
 
         if (authors.isEmpty()) {
             throw new IllegalArgumentException("None of the provided author IDs were valid.");
@@ -77,7 +79,7 @@ public class CourseService {
         course.setAuthors(authors);
 
         // Save the Course entity. JPA will automatically persist the relationship in the join table.
-        System.out.println("Attempting to add course: " + courseDto.getName());
+        log.info("Attempting to add course: {}", courseDto.getName());
         Course savedCourse = courseJpaRepository.save(course);
 
         // Convert the saved Entity back to DTO
@@ -96,7 +98,7 @@ public class CourseService {
      */
     @Transactional
     public Optional<CourseDto> updateCourse(UUID id, CourseDto courseDto, List<UUID> newAuthorIds) {
-        System.out.println("Attempting to update course with ID: " + id);
+        log.info("Attempting to update course with ID: {}", id);
         Optional<Course> existingCourseOpt = courseJpaRepository.findById(id);
 
         if (existingCourseOpt.isPresent()) {
@@ -128,10 +130,10 @@ public class CourseService {
             // Save the updated Course entity. JPA detects changes to entity and its collections.
             Course updatedCourse = courseJpaRepository.save(existingCourse);
 
-            System.out.println("Course and authors updated successfully: " + updatedCourse.getName());
+            log.info("Course and authors updated successfully: {}", updatedCourse.getName());
             return Optional.of(courseMapper.toDto(updatedCourse)); // Convert updated Entity to DTO
         }
-        System.out.println("No course found with ID: " + id + " to update.");
+        log.info("No course found with ID: {} to update.", id);
         return Optional.empty();
     }
 
@@ -143,7 +145,7 @@ public class CourseService {
      */
     @Transactional(readOnly = true)
     public Optional<CourseDto> viewCourse(UUID id) {
-        System.out.println("Attempting to view course with ID: " + id);
+        log.info("Attempting to view course with ID: {}", id);
         return courseJpaRepository.findById(id)
                 .map(courseMapper::toDto);
     }
@@ -156,7 +158,7 @@ public class CourseService {
      */
     @Transactional(readOnly = true)
     public Page<CourseDto> getAllCourses(Pageable pageable) {
-        System.out.println("Attempting to retrieve all courses with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
+        log.info("Attempting to retrieve all courses with pagination: Page {}, Size {}", pageable.getPageNumber(), pageable.getPageSize());
         Page<Course> coursePage = courseJpaRepository.findAll(pageable);
         return coursePage.map(courseMapper::toDto); // Map the Page<Course> to Page<CourseDto>
     }
@@ -168,7 +170,7 @@ public class CourseService {
      * @return A Page of recommended CourseDto objects.
      */
     public Page<CourseDto> getRecommendedCourses(Pageable pageable) {
-        System.out.println("Attempting to retrieve all courses with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
+        log.info("Attempting to retrieve recommended courses with pagination: Page {}, Size {}", pageable.getPageNumber(), pageable.getPageSize());
         return courseRecommender.recommendedCourses(pageable);
     }
 
@@ -181,13 +183,13 @@ public class CourseService {
      */
     @Transactional
     public boolean deleteCourse(UUID id) {
-        System.out.println("Attempting to delete course with ID: " + id);
+        log.info("Attempting to delete course with ID: {}", id);
         if (courseJpaRepository.existsById(id)) {
             courseJpaRepository.deleteById(id);
-            System.out.println("Course with ID: " + id + " deleted successfully.");
+            log.info("Course with ID: {} deleted successfully.", id);
             return true;
         } else {
-            System.out.println("No course found with ID: " + id + " to delete.");
+            log.info("No course found with ID: {} to delete.", id);
             return false;
         }
     }

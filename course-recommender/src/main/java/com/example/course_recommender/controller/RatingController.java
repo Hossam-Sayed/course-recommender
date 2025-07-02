@@ -2,6 +2,7 @@ package com.example.course_recommender.controller;
 
 import com.example.course_recommender.dto.RatingDto;
 import com.example.course_recommender.service.RatingService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.UUID;
  * REST Controller for managing Rating resources.
  * Exposes endpoints for CRUD operations and retrieving ratings by course.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/ratings")
 public class RatingController {
@@ -75,10 +77,10 @@ public class RatingController {
             RatingDto savedRating = ratingService.addRating(ratingDto);
             return new ResponseEntity<>(savedRating, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            System.err.println("Error adding rating: " + e.getMessage());
+            log.error("Error adding rating: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.err.println("An unexpected error occurred while adding rating: " + e.getMessage());
+            log.error("An unexpected error occurred while adding rating: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

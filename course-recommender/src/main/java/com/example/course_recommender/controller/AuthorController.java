@@ -2,6 +2,7 @@ package com.example.course_recommender.controller;
 
 import com.example.course_recommender_bean.dto.AuthorDto;
 import com.example.course_recommender.service.AuthorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/authors")
 public class AuthorController {
@@ -42,10 +44,10 @@ public class AuthorController {
             AuthorDto savedAuthor = authorService.addAuthor(authorDto);
             return new ResponseEntity<>(savedAuthor, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            System.err.println("Error adding author: " + e.getMessage());
+            log.error("Error adding author: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.err.println("Unexpected error adding author: " + e.getMessage());
+            log.error("Unexpected error adding author: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -58,11 +60,11 @@ public class AuthorController {
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (IllegalArgumentException e) {
             // Catch IllegalArgumentException and return 400 Bad Request
-            System.err.println("Error updating author: " + e.getMessage());
+            log.error("Error updating author: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             // Catch any other unexpected exceptions and return 500 Internal Server Error
-            System.err.println("An unexpected error occurred while updating author: " + e.getMessage());
+            log.error("An unexpected error occurred while updating author: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

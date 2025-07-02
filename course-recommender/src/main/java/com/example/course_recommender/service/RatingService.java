@@ -6,6 +6,7 @@ import com.example.course_recommender.model.Course;
 import com.example.course_recommender.model.Rating;
 import com.example.course_recommender.repository.CourseJpaRepository;
 import com.example.course_recommender.repository.RatingJpaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.UUID;
  * Service layer for managing Rating-related business logic.
  * Uses Spring Data JPA repositories, MapStruct for DTO mapping.
  */
+@Slf4j
 @Service
 public class RatingService {
 
@@ -64,7 +66,7 @@ public class RatingService {
         Rating rating = ratingMapper.toEntity(ratingDto);
         rating.setCourse(course);
 
-        System.out.println("Attempting to add rating for course: " + course.getName());
+        log.info("Attempting to add rating for course: {}", course.getName());
         Rating savedRating = ratingJpaRepository.save(rating);
 
         return ratingMapper.toDto(savedRating);
@@ -80,7 +82,7 @@ public class RatingService {
      */
     @Transactional
     public Optional<RatingDto> updateRating(UUID id, RatingDto ratingDto) {
-        System.out.println("Attempting to update rating with ID: " + id);
+        log.info("Attempting to update rating with ID: {}", id);
         Optional<Rating> existingRatingOpt = ratingJpaRepository.findById(id);
 
         if (existingRatingOpt.isPresent()) {
@@ -91,7 +93,7 @@ public class RatingService {
             Rating updatedRating = ratingJpaRepository.save(existingRating);
             return Optional.of(ratingMapper.toDto(updatedRating));
         }
-        System.out.println("No rating found with ID: " + id + " to update.");
+        log.info("No rating found with ID: {} to update.", id);
         return Optional.empty();
     }
 
@@ -103,7 +105,7 @@ public class RatingService {
      */
     @Transactional(readOnly = true)
     public Optional<RatingDto> viewRating(UUID id) {
-        System.out.println("Attempting to view rating with ID: " + id);
+        log.info("Attempting to view rating with ID: {}", id);
         return ratingJpaRepository.findById(id)
                 .map(ratingMapper::toDto);
     }
@@ -116,7 +118,7 @@ public class RatingService {
      */
     @Transactional(readOnly = true)
     public Page<RatingDto> getAllRatings(Pageable pageable) {
-        System.out.println("Attempting to retrieve all ratings with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
+        log.info("Attempting to retrieve all ratings with pagination: Page {}, Size {}", pageable.getPageNumber(), pageable.getPageSize());
         Page<Rating> ratingPage = ratingJpaRepository.findAll(pageable);
         return ratingPage.map(ratingMapper::toDto);
     }
@@ -129,13 +131,13 @@ public class RatingService {
      */
     @Transactional
     public boolean deleteRating(UUID id) {
-        System.out.println("Attempting to delete rating with ID: " + id);
+        log.info("Attempting to delete rating with ID: {}", id);
         if (ratingJpaRepository.existsById(id)) {
             ratingJpaRepository.deleteById(id);
-            System.out.println("Rating with ID: " + id + " deleted successfully.");
+            log.info("Rating with ID: {} deleted successfully.", id);
             return true;
         } else {
-            System.out.println("No rating found with ID: " + id + " to delete.");
+            log.info("No rating found with ID: {} to delete.", id);
             return false;
         }
     }
@@ -149,7 +151,7 @@ public class RatingService {
      */
     @Transactional(readOnly = true)
     public Page<RatingDto> getRatingsByCourseId(UUID courseId, Pageable pageable) {
-        System.out.println("Attempting to get ratings for course " + courseId + " with pagination.");
+        log.info("Attempting to get ratings for course {} with pagination.", courseId);
         Page<Rating> ratingPage = ratingJpaRepository.findByCourseId(courseId, pageable);
         return ratingPage.map(ratingMapper::toDto);
     }
@@ -162,7 +164,7 @@ public class RatingService {
      */
     @Transactional(readOnly = true)
     public double getSimpleMeanRatingForCourse(UUID courseId) {
-        System.out.println("Calculating simple mean rating for course: " + courseId);
+        log.info("Calculating simple mean rating for course: {}", courseId);
         List<Rating> ratings = ratingJpaRepository.findByCourseId(courseId);
         if (ratings.isEmpty()) {
             return 0.0;

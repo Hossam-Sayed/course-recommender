@@ -6,6 +6,7 @@ import com.example.course_recommender.model.Assessment;
 import com.example.course_recommender.model.Course;
 import com.example.course_recommender.repository.AssessmentJpaRepository;
 import com.example.course_recommender.repository.CourseJpaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.UUID;
  * Uses Spring Data JPA repositories, MapStruct for DTO mapping.
  * Handles the one-to-one relationship with Course.
  */
+@Slf4j
 @Service
 public class AssessmentService {
 
@@ -77,7 +79,7 @@ public class AssessmentService {
         course.setAssessment(assessment);
 
         // 4. Save the Assessment entity.
-        System.out.println("Attempting to add assessment for course: " + course.getName());
+        log.info("Attempting to add assessment for course: {}", course.getName());
         Assessment savedAssessment = assessmentJpaRepository.save(assessment);
 
         // 5. Return the mapped DTO of the saved entity
@@ -94,7 +96,7 @@ public class AssessmentService {
      */
     @Transactional
     public Optional<AssessmentDto> updateAssessment(UUID id, AssessmentDto assessmentDto) {
-        System.out.println("Attempting to update assessment with ID: " + id);
+        log.info("Attempting to update assessment with ID: {}", id);
         Optional<Assessment> existingAssessmentOpt = assessmentJpaRepository.findById(id);
 
         if (existingAssessmentOpt.isPresent()) {
@@ -112,7 +114,7 @@ public class AssessmentService {
             Assessment updatedAssessment = assessmentJpaRepository.save(existingAssessment);
             return Optional.of(assessmentMapper.toDto(updatedAssessment));
         }
-        System.out.println("No assessment found with ID: " + id + " to update.");
+        log.info("No assessment found with ID: {} to update.", id);
         return Optional.empty();
     }
 
@@ -124,7 +126,7 @@ public class AssessmentService {
      */
     @Transactional(readOnly = true)
     public Optional<AssessmentDto> viewAssessment(UUID id) {
-        System.out.println("Attempting to view assessment with ID: " + id);
+        log.info("Attempting to view assessment with ID: {}", id);
         return assessmentJpaRepository.findById(id)
                 .map(assessmentMapper::toDto);
     }
@@ -137,7 +139,7 @@ public class AssessmentService {
      */
     @Transactional(readOnly = true)
     public Page<AssessmentDto> getAllAssessments(Pageable pageable) {
-        System.out.println("Attempting to retrieve all assessments with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
+        log.info("Attempting to retrieve all assessments with pagination: Page {}, Size {}", pageable.getPageNumber(), pageable.getPageSize());
         Page<Assessment> assessmentPage = assessmentJpaRepository.findAll(pageable);
         return assessmentPage.map(assessmentMapper::toDto);
     }
@@ -150,7 +152,7 @@ public class AssessmentService {
      */
     @Transactional
     public boolean deleteAssessment(UUID id) {
-        System.out.println("Attempting to delete assessment with ID: " + id);
+        log.info("Attempting to delete assessment with ID: {}", id);
         if (assessmentJpaRepository.existsById(id)) {
             Optional<Assessment> assessmentOpt = assessmentJpaRepository.findById(id);
             if (assessmentOpt.isPresent()) {
@@ -161,10 +163,10 @@ public class AssessmentService {
                 }
             }
             assessmentJpaRepository.deleteById(id);
-            System.out.println("Assessment with ID: " + id + " deleted successfully.");
+            log.info("Assessment with ID: {} deleted successfully.", id);
             return true;
         } else {
-            System.out.println("No assessment found with ID: " + id + " to delete.");
+            log.info("No assessment found with ID: {} to delete.", id);
             return false;
         }
     }
@@ -177,7 +179,7 @@ public class AssessmentService {
      */
     @Transactional(readOnly = true)
     public Optional<AssessmentDto> getAssessmentByCourseId(UUID courseId) {
-        System.out.println("Attempting to get assessment for course " + courseId + ".");
+        log.info("Attempting to get assessment for course {}.", courseId);
         return assessmentJpaRepository.findByCourseId(courseId)
                 .map(assessmentMapper::toDto);
     }

@@ -4,6 +4,7 @@ import com.example.course_recommender_bean.dto.AuthorDto;
 import com.example.course_recommender.mapper.AuthorMapper;
 import com.example.course_recommender.model.Author;
 import com.example.course_recommender.repository.AuthorJpaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import java.util.UUID;
  * Service layer for managing Author-related business logic.
  * This class orchestrates data operations by interacting with the AuthorRepository.
  */
+@Slf4j
 @Service // Marks this class as a Spring service component
 public class AuthorService {
 
@@ -37,7 +39,7 @@ public class AuthorService {
      */
     @Transactional
     public AuthorDto addAuthor(AuthorDto authorDto) {
-        System.out.println("Attempting to add author: " + authorDto.getName());
+        log.info("Attempting to add author: {}", authorDto.getName());
         if (authorJpaRepository.findByEmail(authorDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Author with email " + authorDto.getEmail() + " already exists");
         }
@@ -54,23 +56,21 @@ public class AuthorService {
      * @return An Optional containing the updated AuthorDto if found, otherwise Optional.empty().
      */
     public Optional<AuthorDto> updateAuthor(UUID id, AuthorDto authorDto) {
-        System.out.println("Attempting to update author with ID: " + authorDto.getId());
+        log.info("Attempting to update author with ID: {}", authorDto.getId());
         Optional<Author> existingAuthorOpt = authorJpaRepository.findById(id);
 
         if (existingAuthorOpt.isPresent()) {
             Author existingAuthor = existingAuthorOpt.get();
 
-            if (authorDto.getEmail() != null && !authorDto.getEmail().equalsIgnoreCase(existingAuthor.getEmail())) {
-                if (authorJpaRepository.findByEmail(authorDto.getEmail()).isPresent()) {
-                    throw new IllegalArgumentException("Cannot update: Another author with email " + authorDto.getEmail() + " already exists.");
-                }
+            if (authorDto.getEmail() != null && !authorDto.getEmail().equalsIgnoreCase(existingAuthor.getEmail()) && authorJpaRepository.findByEmail(authorDto.getEmail()).isPresent()) {
+                throw new IllegalArgumentException("Cannot update: Another author with email " + authorDto.getEmail() + " already exists.");
             }
 
             authorMapper.updateEntityFromDto(authorDto, existingAuthor);
             Author updatedAuthor = authorJpaRepository.save(existingAuthor);
             return Optional.of(authorMapper.toDto(updatedAuthor));
         }
-        System.out.println("No author found with ID: " + id + " to update.");
+        log.info("No author found with ID: {} to update.", id);
         return Optional.empty();
     }
 
@@ -82,7 +82,7 @@ public class AuthorService {
      */
     @Transactional(readOnly = true)
     public Optional<AuthorDto> viewAuthor(UUID id) {
-        System.out.println("Attempting to view author with ID: " + id);
+        log.info("Attempting to view author with ID: {}", id);
         return authorJpaRepository.findById(id)
                 .map(authorMapper::toDto);
     }
@@ -106,13 +106,13 @@ public class AuthorService {
      */
     @Transactional
     public boolean deleteAuthor(UUID id) {
-        System.out.println("Attempting to delete author with ID: " + id);
+        log.info("Attempting to delete author with ID: {}", id);
         if (authorJpaRepository.existsById(id)) {
             authorJpaRepository.deleteById(id);
-            System.out.println("Author with ID: " + id + " deleted successfully.");
+            log.info("Author with ID: {} deleted successfully.", id);
             return true;
         } else {
-            System.out.println("No author found with ID: " + id + " to delete.");
+            log.info("No author found with ID: {} to delete.", id);
             return false;
         }
     }
@@ -126,7 +126,7 @@ public class AuthorService {
      */
     @Transactional(readOnly = true)
     public Optional<AuthorDto> getAuthorByEmail(String email) {
-        System.out.println("Attempting to find author by email: " + email);
+        log.info("Attempting to find author by email: {}", email);
         return authorJpaRepository.findByEmail(email)
                 .map(authorMapper::toDto);
     }

@@ -5,6 +5,7 @@ import com.example.course_recommender.model.Course;
 import com.example.course_recommender.repository.CourseJpaRepository;
 import com.example.course_recommender_bean.dto.CourseDto;
 import com.example.course_recommender_bean.service.CourseRecommenderImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * A placeholder implementation of the CourseRecommender interface.
  */
+@Slf4j
 @Service
 public class CustomCourseRecommenderImpl extends CourseRecommenderImpl {
 
@@ -36,9 +38,9 @@ public class CustomCourseRecommenderImpl extends CourseRecommenderImpl {
     @Override
     @Transactional(readOnly = true)
     public Page<CourseDto> recommendedCourses(Pageable pageable) {
-        System.out.println("Executing recommendedCourses: returning all available courses with pagination.");
+        log.info("Executing recommendedCourses: returning all available courses with pagination.");
         // TODO: Enhance recommendation logic
-        System.out.println("Attempting to retrieve all courses with pagination: Page " + pageable.getPageNumber() + ", Size " + pageable.getPageSize());
+        log.info("Attempting to retrieve all courses with pagination: Page {}, Size {}", pageable.getPageNumber(), pageable.getPageSize());
         Page<Course> coursePage = courseJpaRepository.findAll(pageable);
         return coursePage.map(courseMapper::toDto);
     }
