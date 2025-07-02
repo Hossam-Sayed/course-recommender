@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/courses").authenticated() // /add
                         .requestMatchers(HttpMethod.PUT, "/api/courses/{id}").authenticated() // /update{id}
                         .requestMatchers(HttpMethod.DELETE, "/api/courses/{id}").authenticated() // /delete/{id}
-                        .requestMatchers(HttpMethod.GET, "/api/courses/{id}").permitAll() // View course endpoint
+                        .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll() // View course endpoint
 
                         // Applying similar rules to other endpoints based on HTTP methods
                         // Author Endpoints
