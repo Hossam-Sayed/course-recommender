@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the CourseController.
  * This class uses @SpringBootTest to load the full application context
- * and an H2 in-memory database for persistence.
+ * and a dedicated MySQL database instance for testing.
  * It also includes tests for Spring Security configuration and custom filter.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
