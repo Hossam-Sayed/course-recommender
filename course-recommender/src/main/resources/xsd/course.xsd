@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/course-recommender/courses"
+           targetNamespace="http://example.com/course-recommender/courses"
+           elementFormDefault="qualified">
+
+    <!-- Define the UUID type if not already globally defined -->
+    <xs:simpleType name="uuidType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Complex type for a basic Author -->
+    <xs:complexType name="AuthorType">
+        <xs:sequence>
+            <xs:element name="id" type="tns:uuidType"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="email" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Complex type for a list of AuthorType -->
+    <xs:complexType name="AuthorsListType">
+        <xs:sequence>
+            <xs:element name="author" type="tns:AuthorType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Complex type for the basic Course structure -->
+    <xs:complexType name="CourseType">
+        <xs:sequence>
+            <xs:element name="id" type="tns:uuidType"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+            <xs:element name="credit" type="xs:int"/>
+            <xs:element name="authors" type="tns:AuthorsListType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Global element declaration for Course -->
+    <xs:element name="Course" type="tns:CourseType"/>
+
+</xs:schema>

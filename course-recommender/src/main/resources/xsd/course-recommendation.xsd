@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/course-recommender/recommendations"
+           xmlns:course="http://example.com/course-recommender/courses"
+           targetNamespace="http://example.com/course-recommender/recommendations"
+           elementFormDefault="qualified">
+
+    <!-- Import the base course schema -->
+    <xs:import namespace="http://example.com/course-recommender/courses" schemaLocation="course.xsd"/>
+
+    <!-- Define a complex type that extends the base CourseType -->
+    <xs:complexType name="CourseWithAdditionalFieldType">
+        <xs:complexContent>
+            <xs:extension base="course:CourseType">
+                <xs:sequence>
+                    <!-- Additional field -->
+                    <xs:element name="recommendationScore" type="xs:double"/>
+                    <xs:element name="recommendedBy" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- Request message for getting recommended courses -->
+    <xs:element name="GetRecommendedCoursesRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="page" type="xs:int" minOccurs="0"/>
+                <xs:element name="size" type="xs:int" minOccurs="0"/>
+                <xs:element name="sort" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Response message for getting recommended courses -->
+    <xs:element name="GetRecommendedCoursesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="courses" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <!-- A list of courses with the additional field -->
+                            <xs:element name="course" type="tns:CourseWithAdditionalFieldType" minOccurs="0"
+                                        maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="totalElements" type="xs:long"/>
+                <xs:element name="totalPages" type="xs:int"/>
+                <xs:element name="currentPage" type="xs:int"/>
+                <xs:element name="pageSize" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
