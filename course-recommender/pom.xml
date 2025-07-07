@@ -30,11 +30,21 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.postgresql</groupId>-->
-<!--            <artifactId>postgresql</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.mysql</groupId>
@@ -105,6 +115,32 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Directory containing XSD files -->
+                    <sources>
+                        <source>${project.basedir}/src/main/resources/xsd</source>
+                    </sources>
+                    <!-- Output directory for generated Java classes -->
+                    <outputDirectory>${project.build.directory}/generated-sources/jaxb</outputDirectory>
+                    <!-- Package name for the generated Java classes -->
+                    <packageName>com.example.course_recommender.soap.generated</packageName>
+                    <!-- Set to true to delete previous generated sources before new generation -->
+                    <clearOutputDir>false</clearOutputDir>
+                </configuration>
             </plugin>
         </plugins>
     </build>
