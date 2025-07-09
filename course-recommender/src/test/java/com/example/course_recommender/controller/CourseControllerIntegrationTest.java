@@ -297,8 +297,8 @@ class CourseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content", hasSize(2)))
-                .andExpect(jsonPath("$.content[0].name").value(savedCourse1.getName()))
-                .andExpect(jsonPath("$.content[1].name").value(savedCourse2.getName()))
+                .andExpect(jsonPath("$.content[0].name").value("SOAP Basics for Beginners"))
+                .andExpect(jsonPath("$.content[1].name").value("Advanced XML Schema Design"))
                 .andExpect(jsonPath("$.totalElements").value(2));
     }
 }
