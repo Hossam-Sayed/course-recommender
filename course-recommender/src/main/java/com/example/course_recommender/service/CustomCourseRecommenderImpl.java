@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
 @Service
 public class CustomCourseRecommenderImpl extends CourseRecommenderImpl {
 
-    // Keep for other methods if needed
-    // Keep for other methods if needed
     private final CourseRecommendationSoapClient soapClient;
     private final SoapCourseMapper soapCourseMapper;
 
